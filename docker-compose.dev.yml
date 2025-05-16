@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    ports:
+      - "5001:5000"
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=example
+      - MYSQL_DATABASE=appdb
+    command: flask run --host=0.0.0.0 --port=5000 --cert=cert.pem --key=key.pem --debug
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+
+volumes:
+  dbdata:

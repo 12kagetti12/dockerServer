@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="jp">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello!</title>
+  </head>
+  <body>
+    <h1>
+      {% for msg in messages %} {{ msg }}<br />
+      {% endfor %}
+    </h1>
+
+    <form action="/submit" method="POST">
+      <label for="text">新しいメッセージ：</label>
+      <input type="text" id="text" name="text" required />
+      <button type="submit">送信</button>
+    </form>
+
+    <form action="/delete_last" method="POST" style="margin-top: 20px">
+      <button
+        type="submit"
+        onclick="return confirm('本当に最後のレコードを削除しますか？');"
+      >
+        最後のレコードを削除
+      </button>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+# npm作業ディレクトリ
+node_modules/
+
+# Pythonキャッシュ
+__pycache__/
+*.pyc
+
+# 証明書・秘密鍵
+cert.pem
+key.pem
+old/flaskr/cert.pem
+old/flaskr/key.pem
+
+# Macの隠しファイル
+.DS_Store
+
+# ログファイル
+*.log
+
+# エディタ・IDE設定
+.vscode/
+.idea/
+
+# 環境変数ファイル
+.env
+
+# 不要ディレクトリ
+old
