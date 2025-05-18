@@ -1,6 +1,6 @@
-📘 README.md 構成案（最新版・具体化版）
+# Docker Server
 
-✅ 第 1 章：プロジェクト概要
+## 1. プロジェクト概要
 
 - 目的：Flask + Docker + MySQL + HTTPS の構成を用いて、フルスタック Web アプリケーション開発と運用を体系的に学ぶ
 - 対象：初中級エンジニア、教育演習、チーム内学習プロジェクト
@@ -9,17 +9,21 @@
   - HTTPS 対応と Nginx による本番環境展開も視野に
   - Docker による環境分離と再現性の高い構成
 
-✅ 第 2 章：前提条件・環境構築（STEP 0）
-📌 必須ツールと導入方法
-| ツール | 推奨バージョン | 説明 | リンク |
-| -------------- | -------------- | -------------------------- | ------------------------------------------------------ |
-| Python | 3.11.x | Flask アプリのローカル起動 | [公式](https://www.python.org/downloads/) |
-| Docker Desktop | 最新 | コンテナ環境の提供 | [公式](https://www.docker.com/products/docker-desktop) |
-| Docker Compose | v2 系 | マルチサービス起動管理 | 同上 |
-| Git | 任意 | バージョン管理 | [公式](https://git-scm.com/) |
+## 2. 前提条件・環境構築（STEP 0）
 
-🧪 セットアップ手順（2 パターン）
-🅰️ Python ローカル環境で起動
+### 必須ツールと導入方法
+
+| ツール         | 推奨バージョン | 説明                       | リンク                                                 |
+| -------------- | -------------- | -------------------------- | ------------------------------------------------------ |
+| Python         | 3.11.x         | Flask アプリのローカル起動 | [公式](https://www.python.org/downloads/)              |
+| Docker Desktop | 最新           | コンテナ環境の提供         | [公式](https://www.docker.com/products/docker-desktop) |
+| Docker Compose | v2 系          | マルチサービス起動管理     | 同上                                                   |
+| Git            | 任意           | バージョン管理             | [公式](https://git-scm.com/)                           |
+
+### セットアップ手順（2 パターン）
+
+#### Python ローカル環境で起動
+
 ★ macOS / Linux の場合
 
 ```bash
@@ -31,9 +35,9 @@ python wsgi.py
 
 ★ Windows（コマンドプロンプト）の場合
 
-```c
+```cmd
 python -m venv venv
-source venv/bin/activate
+venv\Scripts\activate
 pip install -r requirements.txt
 python wsgi.py
 
@@ -48,17 +52,17 @@ pip install -r requirements.txt
 python wsgi.py
 ```
 
-🅱️ Docker で起動（推奨）
+#### Docker で起動（推奨）
 
 ```bash
 docker-compose -f docker-compose.dev.yml up --build
 ```
 
-✅ 第 3 章：構成図とディレクトリ構成（具体版）
-🖼️ サービス構成図（例）
+## 3. 構成図とディレクトリ構成（具体版）
 
-```csharp
-markdown
+### サービス構成図（例）
+
+```
 ┌────────┐       ┌────────────┐        ┌─────────────────┐
 │ Browser│──────▶│ Nginx（任意）│──────▶│ Flask（Gunicorn）│
 └────────┘       └────────────┘        └───────┬─────────┘
@@ -68,9 +72,9 @@ markdown
                                      └────────────────────┘
 ```
 
-📁 ディレクトリツリー例（簡略）
+### ディレクトリツリー例（簡略）
 
-```csharp
+```
 .
 ├── app.py
 ├── wsgi.py
@@ -88,22 +92,25 @@ markdown
 ├── key.pem
 ```
 
-📂 各ディレクトリ・ファイルの役割
-| パス | 内容と役割 |
-| ------------------------- | ----------------------- |
-| `app.py` | Flask のルーティング、DB 操作のコア |
-| `wsgi.py` | 起動エントリーポイント（HTTPS 対応） |
-| `templates/index.html` | Jinja2 テンプレートで表示処理 |
-| `requirements.txt` | 必要ライブラリ一覧 |
-| `Dockerfile` | Flask アプリのコンテナ定義 |
-| `docker-compose.dev.yml` | 開発用構成（Flask + MySQL） |
-| `docker-compose.prod.yml` | 本番用構成（Nginx + Gunicorn） |
-| `init/init.sql` | DB 初期化スクリプト（テーブル定義） |
-| `nginx/nginx.conf` | 本番用の SSL リバースプロキシ設定 |
-| `cert.pem` / `key.pem` | 自己署名証明書（HTTPS 用） |
+### 各ディレクトリ・ファイルの役割
 
-✅ 第 4 章：ステップ別構成と演習問題付き解説
-STEP 1: Flask アプリのコアロジック
+| パス                      | 内容と役割                           |
+| ------------------------- | ------------------------------------ |
+| `app.py`                  | Flask のルーティング、DB 操作のコア  |
+| `wsgi.py`                 | 起動エントリーポイント（HTTPS 対応） |
+| `templates/index.html`    | Jinja2 テンプレートで表示処理        |
+| `requirements.txt`        | 必要ライブラリ一覧                   |
+| `Dockerfile`              | Flask アプリのコンテナ定義           |
+| `docker-compose.dev.yml`  | 開発用構成（Flask + MySQL）          |
+| `docker-compose.prod.yml` | 本番用構成（Nginx + Gunicorn）       |
+| `init/init.sql`           | DB 初期化スクリプト（テーブル定義）  |
+| `nginx/nginx.conf`        | 本番用の SSL リバースプロキシ設定    |
+| `cert.pem` / `key.pem`    | 自己署名証明書（HTTPS 用）           |
+
+## 4. ステップ別構成と演習問題付き解説
+
+### STEP 1: Flask アプリのコアロジック
+
 【目的】
 Flask のルーティングと MySQL との連携を通して、「表示」「登録」「削除」の基本的な Web 処理の流れを理解する。
 
@@ -122,6 +129,7 @@ Flask のルーティングと MySQL との連携を通して、「表示」「�
 - JavaScript `confirm()` で削除前に確認ダイアログ
 
 【ソースコード解説】
+
 ★ 表示
 
 ```python
@@ -171,7 +179,8 @@ def delete_last():
 - Jinja2 のループ構文
 - Flask から渡された `messages` を HTML 上に表示
 
-【STEP 2: HTTPS & WSGI 起動ロジック】
+### STEP 2: WSGI 起動ロジック & HTTPS
+
 ▶ `wsgi.py`
 
 ```python
@@ -186,10 +195,8 @@ if __name__ == '__main__':
 - 開発時の試験起動に便利
 - 本番環境では Gunicorn などから `import` されることを想定
 
-【STEP 2 演習問題】
-
+【演習問題】
 ChatGPT へ投げられる形式
-
 △ 基本編
 Flask の `wsgi.py` を利用する利点は何ですか？
 `__name__ == '__main__'`の意味を教えてください。
@@ -198,7 +205,8 @@ Flask の `wsgi.py` を利用する利点は何ですか？
 Flask の SSL 実行時に `ssl_context` に指定する要素は何ですか？
 Flask の `app.run()`の `host` や `port` はどのように指定すると良いですか？
 
-STEP 2: HTTPS 対応と WSGI 起動
+### STEP 3: HTTPS 対応と WSGI 起動
+
 【目的】
 Flask アプリを WSGI 経由で起動する際に、HTTPS による通信を実現する。このパートでは:
 
@@ -222,7 +230,7 @@ if __name__ == '__main__':
 Flask は `app.run()` の引数 `ssl_context` を指定することで HTTPS 対応可能
 ★ HTTPS 起動例
 
-```YAML
+```python
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, ssl_context=('cert.pem', 'key.pem'))
 ```
@@ -235,6 +243,8 @@ if __name__ == '__main__':
 1. 空のフォルダで作業
 2. 以下の OpenSSL コマンドを実行
 
+★ macOS / Linux（ターミナル）の場合
+
 ```bash
 openssl req -x509 -newkey rsa:4096 \
   -keyout key.pem -out cert.pem \
@@ -244,6 +254,26 @@ openssl req -x509 -newkey rsa:4096 \
 
 - `/CN=localhost `はテスト用の CommonName
 - `.pem` ファイルを Flask や Nginx で利用
+
+★ Windows（Git Bash / WSL 環境）の場合
+
+```bash
+openssl req -x509 -newkey rsa:4096 \
+  -keyout key.pem -out cert.pem \
+  -days 365 -nodes \
+  -subj "/CN=localhost"
+```
+
+- Git Bash または Windows Subsystem for Linux (WSL) を使用してください
+- PowerShell や CMD では正常に動作しないことがあります
+
+★ Windows（PowerShell / CMD 環境）※代替案
+Windows 環境では OpenSSL が標準搭載されていないため、以下の方法でインストールしてください：
+
+・OpenSSL for Windows を導入
+https://slproweb.com/products/Win32OpenSSL.html
+
+インストール後、cmd.exe または PowerShell にて openssl.exe を実行可能にします。
 
 【推奨方式】
 
@@ -262,7 +292,8 @@ Flask で HTTPS を使用するためには、`app.run` にどのような引数
 自己署名証明書を使用する場合の利点と注意点を教えてください
 `cert.pem` と `key.pem` は何を代表していますか？
 
-STEP 3: 依存ライブラリ管理 (`requirements.txt`)
+### STEP 4: 依存ライブラリ管理 (`requirements.txt`)
+
 【目的】
 Flask アプリに必要なライブラリを `requirements.txt` に明示し、プロジェクトの現状を再現可能なようにする。
 
@@ -278,7 +309,7 @@ gunicorn
 【各ライブラリの解説】
 | ライブラリ | 用途 |
 | ------------------------- | ----------------------- |
-| `flask` | Web アプリケーション架査 (コア) |
+| `flask` | Web アプリケーションフレームワーク (コア) |
 | `mysql-connector-python` | MySQL と Python を連携するためのドライバー |
 | `gunicorn` | WSGI サーバー (Flask を本番環境で動作させる) |
 
@@ -311,14 +342,15 @@ ChatGPT へ投げられる形式
 Flask を本番環境で動かす場合、`gunicorn` を入れる利点は何ですか？
 `mysql-connector-python` はどのようなコードで使用されますか？
 
-STEP 4: Docker による環境構築
+### STEP 5: Docker による環境構築
+
 【目的】
 Flask と MySQL を含むマルチサービスを Docker で構築し、環境構築の再現性と簡易性を高める。
 
 【ファイル構成】
 ▶ `Dockerfile`
 
-```YAML
+```dockerfile
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -336,7 +368,7 @@ COPY . .
 ▶ docker-compose.dev.yml
 
 ```YAML
-version: "3.8"
+version: "3.x"  # 最新のversionを確認。今回は3.8で起動
 services:
   app:
     build: .
@@ -386,7 +418,7 @@ docker-compose -f docker-compose.dev.yml up --build
 
 - `command`:` flask run` は HTTPS 依存
 - `volumes` は 開発時に便利 (ホットリロード)
-- `depends_on` は DB 起動後に app を突動
+- `depends_on` は DB 起動後に app を起動
 
 【演習問題】
 ChatGPT へ投げられる形式
@@ -395,7 +427,8 @@ Docker で「ボリューム」を利用する目的を教えてください
 `docker-compose.yml` の `depends_on` は DB 起動を完全に待つ保証になりますか？
 `compose` で command: `flask run` ... を設定する意味を教えてください
 
-STEP 5: MySQL 構造定義と初期化
+### STEP 6: MySQL 構造定義と初期化
+
 【目的】
 MySQL の初期起動時に、Docker コンテナ内で DB 構造を定義し、データを自動挿入する。
 
@@ -425,10 +458,46 @@ INSERT INTO messages (text) VALUES ('Hello World');
 
 - MySQL コンテナは `docker-compose.dev.yml` の中で:
 
+★ macOS / Linux の場合
+
 ```YAML
 volumes:
 	- ./init:/docker-entrypoint-initdb.d
 ```
+
+★ Windows（Git Bash / WSL / Docker Desktop 環境）の場合
+
+```YAML
+volumes:
+  - ./init:/docker-entrypoint-initdb.d
+```
+
+- 基本的に macOS/Linux と同じ形式で動作します。
+- ただし環境によっては `./` の解釈が不安定な場合があります。
+
+★★ 安定性を高める方法（代替案）：もし windows でうまく動かない場合
+
+```YAML
+volumes:
+  - ${PWD}/init:/docker-entrypoint-initdb.d
+```
+
+- `${PWD}` はカレントディレクトリの絶対パスに展開されるため、Windows 環境でもトラブルが少ないです。
+- `env` ファイルで `PWD` を明示的に定義しても OK です。
+
+★ Windows（PowerShell / CMD の場合の注意）
+
+- PWD は展開されないため、以下のように絶対パスを明記する必要があります
+
+```YAML
+volumes:
+  - C:/Users/yourname/project/init:/docker-entrypoint-initdb.d
+```
+
+- パスの区切りは必ずスラッシュ（/）で記述します。
+- バックスラッシュ（\）は YAML 構文でエラーになります。
+
+★★ 共通の挙動として
 
 - 初回のコンテナ起動時に `/docker-entrypoint-initdb.d` 内の SQL が実行される
 - 一度ボリュームに書き込まれると再実行されない
@@ -453,16 +522,17 @@ Docker で `init.sql` を再実行させるにはどうすればよいですか�
 `AUTO_INCREMENT` の意味を説明してください
 `CREATE DATABASE IF NOT EXISTS` を使う理由を教えてください
 
-STEP 6 (Optional): Nginx と本番構成 (SSL 終章)
+### STEP 7 (Optional): Nginx と本番構成 (SSL 終端処理)
+
 【目的】
-HTTPS の終章処理をアプリ側ではなく Nginx に委託する構成を学び、Flask + Gunicorn + Nginx の本番配置を理解する。
+HTTPS の終端処理をアプリ側ではなく Nginx に委託する構成を学び、Flask + Gunicorn + Nginx の本番配置を理解する。
 
 【構成概要】
 ▶ `docker-compose.prod.yml` (3 サービス)
 
 - app: Gunicorn で Flask を起動 (ポート 8000)
 - db: MySQL 8 + 初期 SQL
-- nginx: HTTPS 終章処理とリバースプロキシ
+- nginx: HTTPS 終端処理とリバースプロキシ
 
 ▶ `nginx/nginx.conf`
 
@@ -556,16 +626,26 @@ Nginx は HTTPS で受けたリクエストを Flask 側にどのように渡し
 Flask を Gunicorn + Nginx で動かす利点は何ですか？
 443 番ポートにリダイレクトするとき、HTTP ステータスコードになぜ 301 を使うのが良いのでしょう？
 
-✅ 補足章 1：デバッグとトラブルシューティング
+::: info
+デバッグとトラブルシューティング
+:::
 
 - よくあるエラーと対処（DB 未接続、ポート競合）
 - コンテナ・ログの確認コマンド一覧
 
-✅ 補足章 2：発展・拡張ステップ（Next Step）
+::: info
+発展・拡張ステップ（Next Step）
+:::
 
 - REST API 化、SPA 接続、CSRF 対策、CI/CD 導入案など
 
-✅ 補足章 3：ライセンスとクレジット
+::: info
+ライセンスとクレジット
+:::
 
 - MIT or チーム用ライセンス
 - 作成者・履歴など
+
+## LICENSE
+
+This project is licensed under the [MIT License](./LICENSE).
